@@ -1,5 +1,5 @@
 import galois
-from functions import encode_vector_to_polynomial, decode_polynomial_to_vector, add_in_ring, multiply_in_ring
+from functions import encode_vector_to_polynomial, add_in_ring, multiply_in_ring
 
 if __name__ == "__main__":
     q = 23
