@@ -1,5 +1,5 @@
 import galois
-from functions import create_polynomial, reduce_polynomial
+from part_2.examples.functions import create_polynomial, reduce_polynomial
 
 if __name__ == "__main__":
     q = 17

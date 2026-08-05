@@ -1,4 +1,4 @@
-from functions import encode_real, decode_real
+from part_2.examples.functions import encode_real, decode_real
 
 if __name__ == "__main__":
     q = 17

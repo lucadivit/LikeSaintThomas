@@ -1,5 +1,5 @@
 import galois
-from functions import encode_vector_to_polynomial, decode_polynomial_to_vector
+from part_2.examples.functions import encode_vector_to_polynomial, decode_polynomial_to_vector
 
 if __name__ == "__main__":
     q = 23
