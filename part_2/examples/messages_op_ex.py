@@ -1,24 +1,24 @@
-import galois
-from part_2.examples.functions import encode_vector_to_polynomial, add_in_ring, multiply_in_ring
+from part_2.Encoder import Encoder
+from part_2.PolynomialRing import PolynomialRing
+
 
 if __name__ == "__main__":
     q = 23
-    N = 4
-    GF = galois.GF(q)
-    x = galois.Poly.Identity(GF)
-    modulus = x ** N + GF(1)
+    n = 4
     scale = 10
+
+    ring = PolynomialRing(degree=n, modulus=q)
+    encoder = Encoder(scale=scale, polynomial_ring=ring)
 
     m1 = [1.2, 0.5, 2.1]
     m2 = [0.3, 1.0, 0.4]
+    poly_m1 = encoder.encode(values=m1)
+    poly_m2 = encoder.encode(values=m2)
 
-    _, _, poly_m1 = encode_vector_to_polynomial(values=m1, scale=scale, q=q, field=GF, modulus=modulus)
-    _, _, poly_m2 = encode_vector_to_polynomial(values=m2, scale=scale, q=q, field=GF, modulus=modulus)
+    sum_polynomial = ring.add(first=poly_m1, second=poly_m2)
+    product_polynomial = ring.multiply(first=poly_m1, second=poly_m2)
 
-    sum_poly = add_in_ring(poly_a=poly_m1, poly_b=poly_m2, modulus=modulus)
-    product_poly = multiply_in_ring(poly_a=poly_m1, poly_b=poly_m2, modulus=modulus)
-
-    print("m1 nell'anello:", poly_m1)
-    print("m2 nell'anello:", poly_m2)
-    print("Somma nell'anello:", sum_poly)
-    print("Prodotto nell'anello:", product_poly)
+    print("m1 nell'anello:", ring.format(poly_m1))
+    print("m2 nell'anello:", ring.format(poly_m2))
+    print("Somma nell'anello:", ring.format(sum_polynomial))
+    print("Prodotto nell'anello:", ring.format(product_polynomial))

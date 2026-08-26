@@ -1,21 +1,19 @@
-import galois
-from part_2.examples.functions import create_polynomial, reduce_polynomial, add_in_ring, multiply_in_ring
+from part_2.PolynomialRing import PolynomialRing
+
 
 if __name__ == "__main__":
     q = 17
-    N = 4
+    n = 4
 
-    GF = galois.GF(q)
-    x = galois.Poly.Identity(GF)
-    modulus = x ** N + GF(1)
+    ring = PolynomialRing(degree=n, modulus=q)
 
     # a(x) = 2x^2 + 2x + 3
-    a = reduce_polynomial(poly=create_polynomial(coefficients=[2, 2, 3], q=q, field=GF), modulus=modulus)
+    a = ring.create(coefficients=[3, 2, 2])
 
     # b(x) = 15x^2 + 1
-    b = reduce_polynomial(poly=create_polynomial(coefficients=[15, 0, 1], q=q, field=GF), modulus=modulus)
+    b = ring.create(coefficients=[1, 0, 15])
 
-    sum_result = add_in_ring(poly_a=a, poly_b=b, modulus=modulus)
-    product_result = multiply_in_ring(poly_a=a, poly_b=b, modulus=modulus)
-    print(f"a(x) + b(x): {sum_result}")
-    print(f"a(x) * b(x): {product_result}")
+    sum_result = ring.add(first=a, second=b)
+    product_result = ring.multiply(first=a, second=b)
+    print("a(x) + b(x):", ring.format(sum_result))
+    print("a(x) * b(x):", ring.format(product_result))

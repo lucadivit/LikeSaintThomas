@@ -1,23 +1,21 @@
-import galois
-from part_2.examples.functions import encode_vector_to_polynomial, decode_polynomial_to_vector
+from part_2.Encoder import Encoder
+from part_2.PolynomialRing import PolynomialRing
+
 
 if __name__ == "__main__":
     q = 23
-    N = 4
-    GF = galois.GF(q)
-    x = galois.Poly.Identity(GF)
-    modulus = x ** N + GF(1)
+    n = 4
     scale = 10
 
-    m = [1.2, 0.5, 2.1]
-    scaled, encoded, message_poly = encode_vector_to_polynomial(values=m, scale=scale, q=q, field=GF, modulus=modulus)
-    decoded_coefficients, decoded_message = decode_polynomial_to_vector(poly=message_poly, scale=scale, expected_length=len(m))
+    ring = PolynomialRing(degree=n, modulus=q)
+    encoder = Encoder(scale=scale, polynomial_ring=ring)
 
-    print("Messaggio originale:", m)
-    print("Messaggio scalato:", scaled)
-    print("Messaggio codificato modulo q:", encoded)
-    # 12x^2 + 5x + 21
-    print("Messaggio nell'anello:", message_poly)
+    message = [1.2, 0.5, 2.1]
+    scaled_values = [encoder.encode_value(value) for value in message]
+    message_polynomial = encoder.encode(values=message)
+    decoded_message = encoder.decode(polynomial=message_polynomial, expected_length=len(message))
 
-    print("Coefficienti decodificati:", decoded_coefficients)
+    print("Messaggio originale:", message)
+    print("Messaggio scalato:", scaled_values)
+    print("Messaggio nell'anello:", ring.format(message_polynomial))
     print("Messaggio decodificato:", decoded_message)

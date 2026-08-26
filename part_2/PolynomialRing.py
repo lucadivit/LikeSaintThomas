@@ -40,9 +40,15 @@ class PolynomialRing:
         return [coefficient % self._modulus for coefficient in result]
 
     def add(self, first: list[int], second: list[int]) -> list[int]:
+        first = self.create(first)
+        second = self.create(second)
+
         return [(first[index] + second[index]) % self._modulus for index in range(self._degree)]
 
     def multiply(self, first: list[int], second: list[int]) -> list[int]:
+        first = self.create(first)
+        second = self.create(second)
+
         product = [0] * (2 * self._degree - 1)
 
         for first_index, first_coefficient in enumerate(first):
