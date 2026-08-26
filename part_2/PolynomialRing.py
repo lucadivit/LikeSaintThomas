@@ -1,6 +1,3 @@
-import galois
-
-
 class PolynomialRing:
 
     def __init__(self, degree: int, modulus: int):
@@ -15,12 +12,6 @@ class PolynomialRing:
 
         self._degree = degree
         self._modulus = modulus
-        self._field = galois.GF(modulus)
-
-        x = galois.Poly.Identity(self._field)
-        self._polynomial_modulus = (
-            x ** self._degree + self._field(1)
-        )
 
     @property
     def degree(self) -> int:
@@ -30,18 +21,63 @@ class PolynomialRing:
     def modulus(self) -> int:
         return self._modulus
 
-    def create(self, coefficients: list[int]) -> galois.Poly:
+    def create(self, coefficients: list[int]) -> list[int]:
         reduced_coefficients = [coefficient % self._modulus for coefficient in coefficients]
 
-        polynomial = galois.Poly(reduced_coefficients, field=self._field)
+        if len(reduced_coefficients) < self._degree:
+            reduced_coefficients += [0] * (self._degree - len(reduced_coefficients))
 
-        return self.reduce(polynomial)
+        return self.reduce(reduced_coefficients)
 
-    def reduce(self, polynomial: galois.Poly) -> galois.Poly:
-        return polynomial % self._polynomial_modulus
+    def reduce(self, coefficients: list[int]) -> list[int]:
+        result = coefficients[:]
 
-    def add(self, first: galois.Poly, second: galois.Poly) -> galois.Poly:
-        return self.reduce(first + second)
+        while len(result) > self._degree:
+            coefficient = result.pop()
+            target_index = len(result) - self._degree
+            result[target_index] -= coefficient
 
-    def multiply(self, first: galois.Poly, second: galois.Poly) -> galois.Poly:
-        return self.reduce(first * second)
+        return [coefficient % self._modulus for coefficient in result]
+
+    def add(self, first: list[int], second: list[int]) -> list[int]:
+        return [(first[index] + second[index]) % self._modulus for index in range(self._degree)]
+
+    def multiply(self, first: list[int], second: list[int]) -> list[int]:
+        product = [0] * (2 * self._degree - 1)
+
+        for first_index, first_coefficient in enumerate(first):
+            for second_index, second_coefficient in enumerate(second):
+                product[first_index + second_index] += (first_coefficient * second_coefficient)
+
+        return self.reduce(product)
+
+    def format(self, polynomial: list[int]) -> str:
+        terms = []
+
+        for exponent in range(len(polynomial) - 1, -1, -1):
+            coefficient = polynomial[exponent]
+
+            if coefficient == 0:
+                continue
+
+            if exponent == 0:
+                term = str(coefficient)
+
+            elif exponent == 1:
+                if coefficient == 1:
+                    term = "x"
+                else:
+                    term = f"{coefficient}x"
+
+            else:
+                if coefficient == 1:
+                    term = f"x^{exponent}"
+                else:
+                    term = f"{coefficient}x^{exponent}"
+
+            terms.append(term)
+
+        if not terms:
+            return "0"
+
+        return " + ".join(terms)
