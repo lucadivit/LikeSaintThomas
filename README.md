@@ -6,6 +6,7 @@ di articoli "Like Saint Thomas" disponibile sul mio [blog personale](https://www
 E' diviso in piu' sezioni.
 
 * [part_2](https://www.lucadivita.it/en/crittografia-sicurezza/like-saint-thomas-2/): Contiene il codice introduttivo al crittosistema omomorfico CKKS.
+* [part_3](https://www.lucadivita.it/en/crittografia-sicurezza/like-saint-thomas-3/): Contiene il codice relativo alla gestione del rescaling e della catena di moduli.
 
 ## Installazione
 
